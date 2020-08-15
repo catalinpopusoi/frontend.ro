@@ -1,5 +1,5 @@
-import Head from 'next/head'
-import Link from 'next/link'
+import Head from 'next/head';
+import Link from 'next/link';
 
 export default function Home() {
   return (
@@ -11,7 +11,8 @@ export default function Home() {
 
       <main>
         <h1 className="title">
-          Bine ai venit pe <strong>Frontend.ro</strong>
+          Bine ai venit pe
+          <strong>Frontend.ro</strong>
         </h1>
 
         <div className="grid">
@@ -21,35 +22,34 @@ export default function Home() {
               <p>Descriere lectii HTML</p>
             </a>
           </Link>
-
-          <Link href="/css">
+          <Link href="/bob" prefetch={false}>
             <a className="card">
-              <h3>CSS &rarr;</h3>
-              <p>Descriere lectii CSS</p>
+              <h3>User profile</h3>
+              <p>Profilul unui utilizator</p>
             </a>
           </Link>
-
-          <Link href="/javascript">
+          <Link href="/jon-doe" prefetch={false}>
             <a className="card">
-              <h3>Javascript &rarr;</h3>
-              <p>Descriere lectii JS</p>
+              <h3>404 User Profile</h3>
+              <p>Profilul unui utilizator inexistent</p>
             </a>
           </Link>
-
-          <Link href="/exercises">
+          <Link href="/error" prefetch={false}>
             <a className="card">
-              <h3>Exercitii &rarr;</h3>
-              <p>Descriere Exercitii</p>
+              <h3>500 User Profile</h3>
+              <p>Profilul unui utilizator inexistent</p>
             </a>
           </Link>
         </div>
       </main>
 
       <footer>
-        Copyright {new Date().getFullYear()}
+        Copyright
+        {new Date().getFullYear()}
       </footer>
 
-      <style jsx>{`
+      <style jsx>
+        {`
         .container {
           min-height: 100vh;
           padding: 0 0.5rem;
@@ -178,9 +178,11 @@ export default function Home() {
             flex-direction: column;
           }
         }
-      `}</style>
+      `}
+      </style>
 
-      <style jsx global>{`
+      <style jsx global>
+        {`
         html,
         body {
           padding: 0;
@@ -193,7 +195,8 @@ export default function Home() {
         * {
           box-sizing: border-box;
         }
-      `}</style>
+      `}
+      </style>
     </div>
-  )
+  );
 }
