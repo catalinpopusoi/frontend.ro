@@ -1,9 +1,18 @@
 import React from 'react';
 import Head from 'next/head';
+import Link from 'next/link';
 
 import Header from '~/components/header/Header.component';
-
 import styles from '~/styles/pages/feedback-review.module.scss';
+
+
+/**
+ * TODO:
+ * 1. Move components
+ * 2. Add button actions
+ * 3. Add link to commenter profile
+ * 4. Create API functionality
+ */
 
 interface Comment {
   id: number;
@@ -24,7 +33,12 @@ function Comment(props: Comment) {
     <div className={styles.comment}>
       <header>
         <h4>
-          <strong>{props.user}</strong> a lasat urmatorul comentariu
+          <Link href="/bob" prefetch={false}>
+            <a>
+              <strong>{props.user}</strong>
+            </a>
+          </Link>
+          <span> a lasat urmatorul comentariu</span>
         </h4>
         <button>&#128077;</button>
         <button>&#128078;</button>
