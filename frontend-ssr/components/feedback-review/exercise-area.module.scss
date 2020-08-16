@@ -1,0 +1,31 @@
+.editor {
+  height: 300px;
+  border: 1px solid #efefef;
+  box-shadow: 0 2px 4px 0 #efefef;
+  padding: 1em;
+  background-color: #fff;
+
+  p {
+    margin: 0;
+  }
+}
+
+.feedback {
+  border-top: 1px solid #dadada;
+  margin-top: 2em;
+
+  > header {
+    display: flex;
+    align-items: center;
+    padding-top: 1em;
+
+    h3 {
+      margin: 0;
+      flex: 1;
+    }
+
+    button:first-of-type {
+      margin-right: 1em;
+    }
+  }
+}
