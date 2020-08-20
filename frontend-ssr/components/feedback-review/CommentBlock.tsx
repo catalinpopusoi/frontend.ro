@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { Comment } from './interfaces';
+import { Comment } from './comment.model';
 import styles from './comment-block.module.scss';
 
 export default function CommentBlock(props: Comment) {
