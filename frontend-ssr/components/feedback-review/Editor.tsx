@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './editor.module.scss';
+import styles from './Editor.module.scss';
 
 /**
  * At the moment, the solution is a simple string.

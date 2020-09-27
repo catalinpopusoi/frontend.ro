@@ -32,7 +32,6 @@ export default function FeedbackReview(props: FeedbackReviewProps) {
           {props.exercise.description}
         </p>
         <Editor solution={props.exercise.solution} />
-        {/** This will need to be displayed only for admin users */}
         <Comments comments={props.comments} />
       </main>
     </>
