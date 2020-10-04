@@ -16,9 +16,12 @@ module.exports = {
     'jsx-a11y/anchor-is-valid': 'off',
     'react/jsx-props-no-spreading': 'off',
     'react/no-unescaped-entities': 'off',
+    'react/require-default-props': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     'import/extensions': 'off',
+    'no-console': 'off',
+    'no-use-before-define': 'off',
   },
   plugins: [
     '@typescript-eslint',
