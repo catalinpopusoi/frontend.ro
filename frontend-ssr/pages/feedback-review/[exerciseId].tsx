@@ -8,6 +8,7 @@ import NotFoundPage from '../404';
 import Editor from '~/components/feedback-review/Editor';
 import Comments from '~/components/feedback-review/Comments';
 import { Comment } from '~/components/feedback-review/CommentBlock';
+import Http from '~/services/Http';
 
 interface FeedbackReviewProps {
   exerciseId: string;
@@ -21,34 +22,38 @@ const initialExerciseState: Exercise = {
 };
 
 export default function FeedbackReview(props: FeedbackReviewProps) {
+  /**
+   * You can test this using either 1 or 2 as the exerciseId
+   * Example URL: /feedback-review/1
+   */
   const { exerciseId } = props;
 
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoadingExercise, setIsLoadingExercise] = useState<boolean>(true);
+  const [isLoadingComments, setIsLoadingComments] = useState<boolean>(true);
+  const [hasError, setHasError] = useState<boolean>(false);
   const [exercise, setExercise] = useState<Exercise>(initialExerciseState);
   const [comments, setComments] = useState<Comment[]>([]);
 
   useEffect(() => {
-    const getData = async () => {
-      const exerciseResp = await fetch(`/api/exercises/${exerciseId}`);
-      if (exerciseResp.status === 200) {
-        const exerciseJson = await exerciseResp.json();
-        setExercise(exerciseJson);
-      }
+    const dataPromises = [
+      Http.get(`/api/exercises/${exerciseId}`),
+      Http.get(`/api/comments/${exerciseId}`),
+    ];
 
-      const commentsResp = await fetch(`/api/comments/${exerciseId}`);
-      if (commentsResp.status === 200) {
-        const commentsJson = await commentsResp.json();
-        setComments(commentsJson);
-      }
-
-      setIsLoading(false);
-    };
-
-    getData();
+    Promise.all(dataPromises)
+      .then((response) => {
+        const [exerciseResponse, commentsResponse] = response;
+        setExercise(exerciseResponse);
+        setComments(commentsResponse);
+      })
+      .catch(() => setHasError(true))
+      .finally(() => {
+        setIsLoadingExercise(false);
+        setIsLoadingComments(false);
+      });
   }, []);
 
-  if (isLoading) return 'Loading...';
-  if (!exercise || !exercise.id) return <NotFoundPage />;
+  if (hasError) return <NotFoundPage />; // temporary
 
   return (
     <>
@@ -58,16 +63,24 @@ export default function FeedbackReview(props: FeedbackReviewProps) {
       </Head>
       <Header />
       <main className={styles.page}>
-        <h1>
-          Exercitiu:
-          {' '}
-          <strong>{exercise.title}</strong>
-        </h1>
-        <p>
-          {exercise.description}
-        </p>
-        <Editor solution={exercise.solution} />
-        <Comments comments={comments} />
+        {
+          isLoadingExercise
+            ? <p>Loading...</p>
+            : (
+              <>
+                <h1>
+                  Exercitiu:
+                  {' '}
+                  <strong>{exercise.title}</strong>
+                </h1>
+                <p>
+                  {exercise.description}
+                </p>
+                <Editor solution={exercise.solution} />
+                {!isLoadingComments && (<Comments comments={comments} />)}
+              </>
+            )
+        }
       </main>
     </>
   );

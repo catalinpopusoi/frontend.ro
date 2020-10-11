@@ -1,8 +1,13 @@
 import { MOCK_EXERCISES } from './mocks';
 
 export default (req, res) => {
-  const { exerciseId } = req.query;
-  const exercise = MOCK_EXERCISES.find((item) => item.id === Number(exerciseId));
+  const exerciseId = Number(req.query.exerciseId);
+  const exercise = MOCK_EXERCISES.find((item) => item.id === exerciseId);
+
+  if (exerciseId === 0) {
+    res.statusCode = 500;
+    return res.end();
+  }
 
   if (!exercise) {
     res.statusCode = 404;
