@@ -7,13 +7,15 @@ import styles from './Editor.module.scss';
  */
 
 interface EditorProps {
-  solution: String;
+  solution: string;
 }
 
 export default function Editor(props: EditorProps) {
+  const { solution } = props;
+
   return (
     <div className={styles.editor}>
-      <p>{props.solution}</p>
+      <p>{solution}</p>
     </div>
-  )
+  );
 }

@@ -1,5 +1,7 @@
+@import '../../../styles/variables';
+
 .comments {
-  border-top: 1px solid #dadada;
+  border-top: 1px solid color(light-grey);
   margin-top: 2em;
 
   > header {

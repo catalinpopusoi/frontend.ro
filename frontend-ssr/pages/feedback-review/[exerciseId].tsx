@@ -7,7 +7,7 @@ import { Exercise } from '../api/exercises/exercise.model';
 import NotFoundPage from '../404';
 import Editor from '~/components/feedback-review/Editor';
 import Comments from '~/components/feedback-review/Comments';
-import { Comment } from '../../components/feedback-review/comment.model';
+import { Comment } from '~/components/feedback-review/CommentBlock';
 
 interface FeedbackReviewProps {
   exercise: Exercise;
@@ -15,7 +15,8 @@ interface FeedbackReviewProps {
 }
 
 export default function FeedbackReview(props: FeedbackReviewProps) {
-  if (!props.exercise) return <NotFoundPage />;
+  const { exercise, comments } = props;
+  if (!exercise) return <NotFoundPage />;
 
   return (
     <>
@@ -26,13 +27,15 @@ export default function FeedbackReview(props: FeedbackReviewProps) {
       <Header />
       <main className={styles.page}>
         <h1>
-          Exercitiu: <strong>{props.exercise.title}</strong>
+          Exercitiu:
+          {' '}
+          <strong>{exercise.title}</strong>
         </h1>
         <p>
-          {props.exercise.description}
+          {exercise.description}
         </p>
-        <Editor solution={props.exercise.solution} />
-        <Comments comments={props.comments} />
+        <Editor solution={exercise.solution} />
+        <Comments comments={comments} />
       </main>
     </>
   );
@@ -42,7 +45,7 @@ export async function getServerSideProps({ params }) {
   const exerciseResp = await fetch(`${process.env.HOST}/api/exercises/${params.exerciseId}`);
   /** This needs to be dispatched only for admin users */
   const commentsResp = await fetch(`${process.env.HOST}/api/comments/${params.exerciseId}`);
-  
+
   let exercise = {};
   let comments = [];
 
@@ -54,7 +57,7 @@ export async function getServerSideProps({ params }) {
   return {
     props: {
       exercise,
-      comments
+      comments,
     },
   };
 }
