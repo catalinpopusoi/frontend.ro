@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 
 import Header from '~/components/header/Header.component';
@@ -10,13 +10,45 @@ import Comments from '~/components/feedback-review/Comments';
 import { Comment } from '~/components/feedback-review/CommentBlock';
 
 interface FeedbackReviewProps {
-  exercise: Exercise;
-  comments: Comment[];
+  exerciseId: string;
 }
 
+const initialExerciseState: Exercise = {
+  id: null,
+  title: '',
+  description: '',
+  solution: '',
+};
+
 export default function FeedbackReview(props: FeedbackReviewProps) {
-  const { exercise, comments } = props;
-  if (!exercise) return <NotFoundPage />;
+  const { exerciseId } = props;
+
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [exercise, setExercise] = useState<Exercise>(initialExerciseState);
+  const [comments, setComments] = useState<Comment[]>([]);
+
+  useEffect(() => {
+    const getData = async () => {
+      const exerciseResp = await fetch(`/api/exercises/${exerciseId}`);
+      if (exerciseResp.status === 200) {
+        const exerciseJson = await exerciseResp.json();
+        setExercise(exerciseJson);
+      }
+
+      const commentsResp = await fetch(`/api/comments/${exerciseId}`);
+      if (commentsResp.status === 200) {
+        const commentsJson = await commentsResp.json();
+        setComments(commentsJson);
+      }
+
+      setIsLoading(false);
+    };
+
+    getData();
+  }, []);
+
+  if (isLoading) return 'Loading...';
+  if (!exercise || !exercise.id) return <NotFoundPage />;
 
   return (
     <>
@@ -41,23 +73,10 @@ export default function FeedbackReview(props: FeedbackReviewProps) {
   );
 }
 
-export async function getServerSideProps({ params }) {
-  const exerciseResp = await fetch(`${process.env.HOST}/api/exercises/${params.exerciseId}`);
-  /** This needs to be dispatched only for admin users */
-  const commentsResp = await fetch(`${process.env.HOST}/api/comments/${params.exerciseId}`);
-
-  let exercise = {};
-  let comments = [];
-
-  if (exerciseResp.status === 404) return { props: exercise };
-
-  exercise = await exerciseResp.json();
-  comments = await commentsResp.json();
+FeedbackReview.getInitialProps = async ({ query }) => {
+  const { exerciseId } = query;
 
   return {
-    props: {
-      exercise,
-      comments,
-    },
+    exerciseId,
   };
-}
+};
